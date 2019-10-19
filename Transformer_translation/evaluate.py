@@ -43,7 +43,7 @@ def evaluate_one_batch(encoder_input, encoder_mask, transformer):
         # last token
         out = transformer.decoder_forward(decoder_input, decoder_mask, memory, encoder_mask)
         _, next_word = torch.max(out[:, -1], dim=-1)  # batch_size * max_len
-        decoder_input[:, :-1] = decoder_input[:, 1:]
+        decoder_input[:, :-1] = decoder_input[:, 1:].clone()
         decoder_input[:, -1] = next_word
 
     return decoder_input.cpu().numpy()  # not contains SOS
