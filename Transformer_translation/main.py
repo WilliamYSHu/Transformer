@@ -9,6 +9,7 @@ from torch.optim import Adam
 from loss import LabelSmoothingLoss
 from optim import NoamOpt
 from evaluate import evaluate_dataset, evaluateRandomly
+import os
 
 # data
 input_lang, output_lang, pairs_train, pairs_dev = prepareData('eng', 'fra', 'eng-fra.txt', True)
@@ -33,6 +34,10 @@ optimizer = NoamOpt(Config.hidden_size, Config.factor, Config.warmup,
 # criterion
 criterion = LabelSmoothingLoss(0.1, tgt_vocab_size=output_lang.n_words, ignore_index=Config.PADDING_token).cuda()
 #criterion = nn.NLLLoss()
+
+# make ckpts save
+if not os.path.exists('ckpts'):
+    os.makedirs('ckpts')
 
 # training
 best_bleu = -1
